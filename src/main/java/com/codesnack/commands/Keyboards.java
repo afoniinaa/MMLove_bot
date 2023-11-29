@@ -2,13 +2,21 @@ package com.codesnack.commands;
 
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Keyboards {
     public static InlineKeyboardMarkup keyboardStart;
     public static InlineKeyboardMarkup keyboardMenu;
     public static InlineKeyboardMarkup keyboardLikeOrNot;
     public static InlineKeyboardMarkup keyboardFaculties;
+    private static final Map<String, String> symbols;
+
+    static {
+        symbols = new HashMap<>();
+        symbols.put("man", "\uD83D\uDD7A");
+    }
 
     static {
         var start = org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton.builder()
@@ -24,7 +32,7 @@ public class Keyboards {
                 .text("Изменить направление").callbackData("Изменить направление")
                 .build();
         var people = org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton.builder()
-                .text("Смотреть людей\uD83D\uDD7A").callbackData("Смотреть людей\uD83D\uDD7A")
+                .text("Смотреть людей" + symbols.get("man")).callbackData("Смотреть людей" + symbols.get("man"))
                 .build();
         var me = org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton.builder()
                 .text("Моя анкета").callbackData("Моя анкета")
@@ -47,8 +55,8 @@ public class Keyboards {
         var mh = org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton.builder()
                 .text("МХ").callbackData("МХ")
                 .build();
-        var mp = org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton.builder()
-                .text("МП").callbackData("МП")
+        var pm = org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton.builder()
+                .text("ПМ").callbackData("ПМ")
                 .build();
         var mo = org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton.builder()
                 .text("МО").callbackData("МО")
@@ -79,7 +87,7 @@ public class Keyboards {
                 .keyboardRow(List.of(mt))
                 .keyboardRow(List.of(ft))
                 .keyboardRow(List.of(mh))
-                .keyboardRow(List.of(mp))
+                .keyboardRow(List.of(pm))
                 .keyboardRow(List.of(mo))
                 .build();
         keyboardLikeOrNot = InlineKeyboardMarkup.builder()

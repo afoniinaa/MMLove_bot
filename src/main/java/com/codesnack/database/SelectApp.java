@@ -49,18 +49,18 @@ public class SelectApp {
     public String sendProfile(Long userId) throws SQLException {
         String sql = "SELECT bio, photo, faculty "
                 + "FROM warehouses WHERE userId = ?";
-        Connection conn = this.connect();
-        PreparedStatement pstmt  = conn.prepareStatement(sql);
-        pstmt.setLong(1, userId);
-        ResultSet rs  = pstmt.executeQuery();
-        if (rs.next()) {
-//            System.out.println(rs.getString("bio") +  "\n" +
-//                    rs.getString("photo") + "\n" +
-//                    rs.getString("faculty"));
-            return rs.getString("bio") +  "\n" +
-                    rs.getString("photo") + "\n" +
-                    rs.getString("faculty");
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt  = conn.prepareStatement(sql)) {
+            pstmt.setLong(1, userId);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getString("bio") + "\n" +
+                        rs.getString("photo") + "\n" +
+                        rs.getString("faculty");
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
         }
-        return null; // или другое значение по умолчанию, если нет строк в результате запроса
+        return null;
     }
 }
