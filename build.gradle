@@ -12,6 +12,15 @@ repositories {
 dependencies {
     testImplementation platform('org.junit:junit-bom:5.9.1')
     testImplementation 'org.junit.jupiter:junit-jupiter'
+    implementation 'org.telegram:telegrambots:6.8.0'
+    //implementation 'org.slf4j:slf4j-nop:1.8.0-alpha0'
+    implementation 'com.google.api-client:google-api-client:1.31.0'
+    implementation 'com.google.oauth-client:google-oauth-client-jetty:1.31.0'
+    implementation 'com.google.apis:google-api-services-sheets:v4-rev581-1.25.0'
+    implementation 'com.google.api-client:google-api-client-jackson2:1.31.0'
+    implementation group: 'org.xerial', name: 'sqlite-jdbc', version: '3.44.0.0'
+    compileJava.options.encoding = 'UTF-8'
+    compileTestJava.options.encoding = 'UTF-8'
 }
 
 test {

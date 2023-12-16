@@ -62,10 +62,10 @@ public class Keyboards {
                 .text("МО").callbackData("МО")
                 .build();
         var yes = org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton.builder()
-                .text("Нравится").callbackData("Нравится")
+                .text("Хочу пообщаться").callbackData("Хочу пообщаться")
                 .build();
         var no = org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton.builder()
-                .text("Не нравится").callbackData("Не нравится")
+                .text("Пропустить").callbackData("Пропустить")
                 .build();
         var menu = org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton.builder()
                 .text("Стоп").callbackData("Стоп")
