@@ -11,10 +11,6 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.io.*;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 
 public class Methods {
     public boolean isNewUser(User user) throws SQLException {
@@ -47,7 +43,7 @@ public class Methods {
         }
     }
 
-    public String createPhotoFile (String folderPath, String fileName){
+    public String createPhotoFile(String folderPath, String fileName) {
         File file = new File(folderPath, fileName);
         try {
             file.createNewFile();
@@ -81,7 +77,4 @@ public class Methods {
             e.printStackTrace();
         }
     }
-
-
-
 }

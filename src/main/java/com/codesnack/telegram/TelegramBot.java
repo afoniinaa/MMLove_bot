@@ -72,6 +72,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     DeleteApp deleteApp = new DeleteApp();
 
     public static Map<Long, Long> likedProfiles = new HashMap<>();
+
     public static void savingId(Long userId, Long randomUserId) {
         likedProfiles.put(userId, randomUserId);
     }
