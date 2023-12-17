@@ -4,12 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ed8b8830-34fc-4c8c-9278-0f677b40410c" name="Changes" comment="Commit">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/codesnack/database/DeleteApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/codesnack/database/DeleteApp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/codesnack/database/SelectApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/codesnack/database/SelectApp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/codesnack/telegram/TelegramBot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/codesnack/telegram/TelegramBot.java" afterDir="false" />
-    </list>
+    <list default="true" id="ed8b8830-34fc-4c8c-9278-0f677b40410c" name="Changes" comment="Commit" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -145,7 +140,15 @@
       <option name="project" value="LOCAL" />
       <updated>1702754873831</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Commit">
+      <option name="closed" value="true" />
+      <created>1702818270516</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1702818270516</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">

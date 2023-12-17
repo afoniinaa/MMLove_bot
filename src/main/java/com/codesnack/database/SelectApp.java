@@ -92,29 +92,6 @@ public class SelectApp {
     private final Map<Long, Set<Long>> shownProfiles = new HashMap<>();
     private final Map<Long, Integer> amountOfShownProfiles = new HashMap<>();
 
-//    public String getRandomProfile(Long userId) throws SQLException {
-//        if (!shownProfiles.containsKey(userId)) {
-//            shownProfiles.put(userId, new HashSet<>());
-//        }
-//        String sql = "SELECT bio, faculty, userId FROM warehouses WHERE userId <> ? ORDER BY RANDOM() LIMIT 1";
-//        try (Connection conn = this.connect();
-//             PreparedStatement pstmt = conn.prepareStatement(sql);) {
-//            pstmt.setLong(1, userId);
-//            ResultSet rs = pstmt.executeQuery();
-//            if (rs.next()) {
-//                Long randomUserId = rs.getLong("userId");
-//                TelegramBot.savingId(userId, randomUserId);
-//                if (!shownProfiles.get(userId).contains(randomUserId)) {
-//                    shownProfiles.get(userId).add(randomUserId);
-//                    return rs.getString("bio") + "\n" +
-//                            rs.getString("faculty");
-//                }
-//                return getRandomProfile(userId);
-//            }
-//            return null;
-//        }
-//    }
-
     public int count() {
         String url = "jdbc:sqlite:C://sqlite/db/test.db";
         try {
