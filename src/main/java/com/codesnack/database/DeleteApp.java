@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+
 public class DeleteApp {
     private Connection connect() {
         String url = "jdbc:sqlite:C://sqlite/db/test.db";
@@ -15,13 +16,12 @@ public class DeleteApp {
         }
         return conn;
     }
+
     public void delete(Long userId) {
         String sql = "DELETE FROM warehouses WHERE userId = ?";
-
         try (Connection conn = this.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setLong(1, userId);
-            //System.out.println("SQL запрос: " + sql + " Параметры: " + userId);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());

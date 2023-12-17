@@ -64,6 +64,11 @@ public class TelegramBot extends TelegramLongPollingBot {
         return token;
     }
 
+    public String getFilePath() throws IOException {
+        var data = java.nio.file.Files.readAllLines(new java.io.File("FilePath.txt").toPath());
+        return data.get(0);
+    }
+
     boolean isChangedFacultyAnswerSent = false;
     boolean isFacultyAnswerSent = false;
     InsertApp insertApp = new InsertApp();
@@ -77,16 +82,14 @@ public class TelegramBot extends TelegramLongPollingBot {
         likedProfiles.put(userId, randomUserId);
     }
 
-    public void onUpdateReceivedCallbackQuery(CallbackQuery callbackQuery) throws SQLException {
+    public void onUpdateReceivedCallbackQuery(CallbackQuery callbackQuery) throws SQLException, IOException {
         var data = callbackQuery.getData();
+        var user = callbackQuery.getFrom();
+        var id = user.getId();
         if (data.equals("Анкета") && userStates.get(callbackQuery.getMessage().getChatId()) != UserState.BIO_LEVEL) {
-            var user = callbackQuery.getFrom();
-            var id = user.getId();
             methods.sendText(id, "1)Как тебя зовут? Сколько тебе лет? Напиши какую-то интересную информацию о себе" + symbols.get("hand"));
             userStates.put(id, UserState.BIO_LEVEL);
         } else if (data.equals("КН") || data.equals("КБ") || data.equals("МТ") || data.equals("МХ") || data.equals("ПМ") || data.equals("МО") || data.equals("ФИИТ")) {
-            var user = callbackQuery.getFrom();
-            var id = user.getId();
             if (userStates.get(id) != UserState.FACULTY_CHANGE && !isFacultyAnswerSent) {
                 methods.sendText(id, "Ваше направление: " + data);
                 methods.sendText(id, "Твоя анкета успешно создана! Для дальнейшего использования бота переходи в /menu");
@@ -100,62 +103,54 @@ public class TelegramBot extends TelegramLongPollingBot {
             }
         } else if (data.equals("Изменить биографию") && userStates.get(callbackQuery.getMessage().getChatId()) != UserState.BIO_CHANGE &&
                 userStates.get(callbackQuery.getMessage().getChatId()) != UserState.DELETE_USER) {
-            var user = callbackQuery.getFrom();
-            var id = user.getId();
             methods.sendText(id, "Ты хочешь изменить информацию о себе. Напиши измененную биографию.");
             userStates.put(id, UserState.BIO_CHANGE);
         } else if (data.equals("Изменить фото") && userStates.get(callbackQuery.getMessage().getChatId()) != UserState.PHOTO_CHANGE &&
                 userStates.get(callbackQuery.getMessage().getChatId()) != UserState.DELETE_USER) {
-            var user = callbackQuery.getFrom();
-            var id = user.getId();
             methods.sendText(id, "Ты хочешь изменить свое фото. Пришли новое фото.");
             userStates.put(id, UserState.PHOTO_CHANGE);
         } else if (data.equals("Изменить направление") && userStates.get(callbackQuery.getMessage().getChatId()) != UserState.FACULTY_CHANGE &&
                 userStates.get(callbackQuery.getMessage().getChatId()) != UserState.DELETE_USER) {
-            var user = callbackQuery.getFrom();
-            var id = user.getId();
             methods.sendMenu(id, "<b>Выбери свое направление</b>", keyboardFaculties);
             userStates.put(id, UserState.FACULTY_CHANGE);
         } else if (data.equals("Удалить свою анкету") && userStates.get(callbackQuery.getMessage().getChatId()) != UserState.DELETE_USER) {
-            var user = callbackQuery.getFrom();
-            var id = user.getId();
             deleteApp.delete(id);
             userStates.put(id, UserState.DELETE_USER);
             methods.sendText(id, "Твой профиль успешно удален. Если захочешь снова создать анкету, используй /start");
         } else if (data.equals("Моя анкета") && userStates.get(callbackQuery.getMessage().getChatId()) != UserState.DELETE_USER) {
-            var user = callbackQuery.getFrom();
-            var id = user.getId();
             methods.sendText(id, "Твоя анкета" + symbols.get("pink heart"));
-            methods.sendPhotoToUser(String.valueOf(id), "C:\\sqlite\\photo", id + ".jpg", selectApp.sendProfile(id));
+            methods.sendPhotoToUser(String.valueOf(id), getFilePath(), id + ".jpg", selectApp.sendProfile(id));
         } else if (data.equals("Смотреть людей" + symbols.get("man"))) {
-            var user = callbackQuery.getFrom();
-            var id = user.getId();
             String profile = selectApp.getRandomProfile(id);
-            var randomUserId = likedProfiles.get(id);
-            methods.sendProfileToUser(String.valueOf(id), "C:\\sqlite\\photo", randomUserId + ".jpg", profile, keyboardLikeOrNot);
+            if (Objects.equals(profile, "Анкет больше нет")) {
+                methods.sendText(id, "Анкет больше нет");
+            } else {
+                var randomUserId = likedProfiles.get(id);
+                methods.sendProfileToUser(String.valueOf(id), getFilePath(), randomUserId + ".jpg", profile, keyboardLikeOrNot);
+            }
         } else if (data.equals("Пропустить")) {
-            var user = callbackQuery.getFrom();
-            var id = user.getId();
             likedProfiles.remove(id);
             String profile = selectApp.getRandomProfile(id);
-            var randomUserId = likedProfiles.get(id);
-            methods.sendProfileToUser(String.valueOf(id), "C:\\sqlite\\photo", randomUserId + ".jpg", profile, keyboardLikeOrNot);
+            if (Objects.equals(profile, "Анкет больше нет")) {
+                methods.sendText(id, "Анкет больше нет");
+            } else {
+                var randomUserId = likedProfiles.get(id);
+                methods.sendProfileToUser(String.valueOf(id), getFilePath(), randomUserId + ".jpg", profile, keyboardLikeOrNot);
+            }
         } else if (data.equals("Хочу пообщаться")) {
-            var user = callbackQuery.getFrom();
-            var id = user.getId();
-            methods.sendPhotoToUser(String.valueOf(likedProfiles.get(id)), "C:\\sqlite\\photo", id + ".jpg", selectApp.sendProfile(id) + "\n" + "С вами хочет пообщаться: " + selectApp.sendUsername(id) + symbols.get("pink heart"));
+            methods.sendPhotoToUser(String.valueOf(likedProfiles.get(id)), getFilePath(), id + ".jpg", selectApp.sendProfile(id) + "\n" + "С вами хочет пообщаться: " + selectApp.sendUsername(id) + symbols.get("pink heart"));
             likedProfiles.remove(id);
             String profile = selectApp.getRandomProfile(id);
-            var randomUserId = likedProfiles.get(id);
-            methods.sendProfileToUser(String.valueOf(id), "C:\\sqlite\\photo", randomUserId + ".jpg", profile, keyboardLikeOrNot);
+            if (Objects.equals(profile, "Анкет больше нет")) {
+                methods.sendText(id, "Анкет больше нет");
+            } else {
+                var randomUserId = likedProfiles.get(id);
+                methods.sendProfileToUser(String.valueOf(id), getFilePath(), randomUserId + ".jpg", profile, keyboardLikeOrNot);
+            }
         } else if (data.equals("Стоп")) {
-            var user = callbackQuery.getFrom();
-            var id = user.getId();
             methods.sendText(id, "Просмотр анкет остановлен. Для дальнейшего использования бота переходи в /menu");
         } else if (data.equals("Моя анкета") || data.equals("Изменить биографию") || data.equals("Изменить фото") || data.equals("Изменить направление") ||
                 data.equals("Удалить свою анкету") && userStates.get(callbackQuery.getMessage().getChatId()) == UserState.DELETE_USER) {
-            var user = callbackQuery.getFrom();
-            var id = user.getId();
             methods.sendText(id, "У вас нет активной анкеты. Можете ее создать с помощью команды /start");
         }
     }
@@ -177,7 +172,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             try {
                 java.io.File downloadedFile = downloadFile(file);
                 String fileName = id + ".jpg";
-                String savedPath = methods.createPhotoFile("C:\\sqlite\\photo", fileName);
+                String savedPath = methods.createPhotoFile(getFilePath(), fileName);
                 java.io.File savedFile = new java.io.File(savedPath);
                 Files.move(downloadedFile, savedFile);
             } catch (IOException | TelegramApiException e) {
@@ -229,7 +224,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         if (callbackQuery != null) {
             try {
                 onUpdateReceivedCallbackQuery(callbackQuery);
-            } catch (SQLException e) {
+            } catch (SQLException | IOException e) {
                 throw new RuntimeException(e);
             }
         }
@@ -249,7 +244,11 @@ public class TelegramBot extends TelegramLongPollingBot {
         } else if (userStates.get(id) == UserState.PHOTO_LEVEL) {
             methods.sendText(id, "Фото принято" + symbols.get("checking"));
             methods.sendMenu(id, "<b>Выбери свое направление</b>", keyboardFaculties);
-            updateApp.updatePhoto(id, "C:\\sqlite\\photo\\" + id + ".jpg");
+            try {
+                updateApp.updatePhoto(id, getFilePath() + id + ".jpg");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
             userStates.put(id, UserState.PROFILE_LEVEL);
         } else if (userStates.get(id) == UserState.PROFILE_LEVEL) {
             isFacultyAnswerSent = false;
@@ -259,7 +258,11 @@ public class TelegramBot extends TelegramLongPollingBot {
             userStates.put(id, UserState.PROFILE_LEVEL);
         } else if (userStates.get(id) == UserState.PHOTO_CHANGE) {
             methods.sendText(id, "Фото успешно изменено!");
-            updateApp.updatePhoto(id, "C:\\sqlite\\photo\\" + id + ".jpg");
+            try {
+                updateApp.updatePhoto(id, getFilePath() + id + ".jpg");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
             userStates.put(id, UserState.PROFILE_LEVEL);
         } else if (userStates.get(id) == UserState.FACULTY_CHANGE && isChangedFacultyAnswerSent) {
             userStates.put(id, UserState.PROFILE_LEVEL);

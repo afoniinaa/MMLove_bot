@@ -89,32 +89,73 @@ public class SelectApp {
         return null;
     }
 
-
-    //Set<Long> shownUsers = new HashSet<>();
     private final Map<Long, Set<Long>> shownProfiles = new HashMap<>();
-    Methods methods = new Methods();
+    private final Map<Long, Integer> amountOfShownProfiles = new HashMap<>();
+
+//    public String getRandomProfile(Long userId) throws SQLException {
+//        if (!shownProfiles.containsKey(userId)) {
+//            shownProfiles.put(userId, new HashSet<>());
+//        }
+//        String sql = "SELECT bio, faculty, userId FROM warehouses WHERE userId <> ? ORDER BY RANDOM() LIMIT 1";
+//        try (Connection conn = this.connect();
+//             PreparedStatement pstmt = conn.prepareStatement(sql);) {
+//            pstmt.setLong(1, userId);
+//            ResultSet rs = pstmt.executeQuery();
+//            if (rs.next()) {
+//                Long randomUserId = rs.getLong("userId");
+//                TelegramBot.savingId(userId, randomUserId);
+//                if (!shownProfiles.get(userId).contains(randomUserId)) {
+//                    shownProfiles.get(userId).add(randomUserId);
+//                    return rs.getString("bio") + "\n" +
+//                            rs.getString("faculty");
+//                }
+//                return getRandomProfile(userId);
+//            }
+//            return null;
+//        }
+//    }
+
+    public int count() {
+        String url = "jdbc:sqlite:C://sqlite/db/test.db";
+        try {
+            Connection connection = DriverManager.getConnection(url);
+            Statement statement = connection.createStatement();
+            String query = "SELECT COUNT(*) FROM warehouses";
+            ResultSet resultSet = statement.executeQuery(query);
+            if (resultSet.next()) {
+                int rowCount = resultSet.getInt(1);
+                return rowCount;
+            }
+            resultSet.close();
+            statement.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
 
     public String getRandomProfile(Long userId) throws SQLException {
         if (!shownProfiles.containsKey(userId)) {
             shownProfiles.put(userId, new HashSet<>());
+            amountOfShownProfiles.put(userId, 0);
         }
         String sql = "SELECT bio, faculty, userId FROM warehouses WHERE userId <> ? ORDER BY RANDOM() LIMIT 1";
         try (Connection conn = this.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql);) {
             pstmt.setLong(1, userId);
             ResultSet rs = pstmt.executeQuery();
-            if (rs.next()) {
-                Long randomUserId = rs.getLong("userId");
-                TelegramBot.savingId(userId, randomUserId);
-                if (!shownProfiles.get(userId).contains(randomUserId)) {
-                    shownProfiles.get(userId).add(randomUserId);
-                    return rs.getString("bio") + "\n" +
-                            rs.getString("faculty");
-                } else {
-                    getRandomProfile(userId);
-                }
+            Long randomUserId = rs.getLong("userId");
+            TelegramBot.savingId(userId, randomUserId);
+            if (!shownProfiles.get(userId).contains(randomUserId)) {
+                shownProfiles.get(userId).add(randomUserId);
+                amountOfShownProfiles.put(userId, amountOfShownProfiles.get(userId) + 1);
+                return rs.getString("bio") + "\n" +
+                        rs.getString("faculty");
+            } else if (amountOfShownProfiles.get(userId) == count() - 1) {
+                return "Анкет больше нет";
             }
         }
-        return null;
+        return getRandomProfile(userId);
     }
 }
