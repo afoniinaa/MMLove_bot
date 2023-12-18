@@ -25,7 +25,6 @@ public class Main {
                 + "	userId real NOT NULL,\n"
                 + "	username text NOT NULL,\n"
                 + " bio text NOT NULL,\n"
-                + " photo text NOT NULL,\n"
                 + " faculty text NOT NULL\n"
                 + ");";
         try (Connection conn = DriverManager.getConnection(url);

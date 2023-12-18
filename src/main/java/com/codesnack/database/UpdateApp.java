@@ -39,18 +39,7 @@ public class UpdateApp {
             System.out.println(e.getMessage());
         }
     }
-    public void updatePhoto(Long userId, String photo) {
-        String sql = "UPDATE warehouses SET photo = ? "
-                + "WHERE userId = ?";
-        try (Connection conn = this.connect();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, photo);
-            pstmt.setLong(2, userId);
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-    }
+
     public void updateFaculty(Long userId, String faculty) {
         String sql = "UPDATE warehouses SET faculty = ? "
                 + "WHERE userId = ?";

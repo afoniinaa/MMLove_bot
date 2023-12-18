@@ -15,15 +15,14 @@ public class InsertApp {
         }
         return conn;
     }
-    public void insert(Long userId, String username, String bio, String photo, String faculty) {
-        String sql = "INSERT INTO warehouses(userId, username, bio, photo, faculty) VALUES(?,?,?,?,?)";
+    public void insert(Long userId, String username, String bio, String faculty) {
+        String sql = "INSERT INTO warehouses(userId, username, bio, faculty) VALUES(?,?,?,?)";
         try (Connection conn = this.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setLong(1, userId);
             pstmt.setString(2, username);
             pstmt.setString(3, bio);
-            pstmt.setString(4, photo);
-            pstmt.setString(5, faculty);
+            pstmt.setString(4, faculty);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());

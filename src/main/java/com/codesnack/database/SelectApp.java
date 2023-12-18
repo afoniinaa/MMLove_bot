@@ -1,10 +1,8 @@
 package com.codesnack.database;
 
+import java.io.*;
 import java.sql.*;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import com.codesnack.commands.Methods;
 import com.codesnack.telegram.TelegramBot;
@@ -21,42 +19,7 @@ public class SelectApp {
         return conn;
     }
 
-    public void selectAll() {
-        String sql = "SELECT id, userId, username, bio, photo, faculty FROM warehouses";
-        try (Connection conn = this.connect();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-            while (rs.next()) {
-                System.out.println(rs.getInt("id") + "\t" +
-                        rs.getLong("userId") + "\t" +
-                        rs.getString("username") + "\t" +
-                        rs.getString("bio") + "\t" +
-                        rs.getString("photo") + "\t" +
-                        rs.getString("faculty"));
-            }
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    public void selectProfile(Long userId) {
-        String sql = "SELECT bio, photo, faculty "
-                + "FROM warehouses WHERE userId = ?";
-        try (Connection conn = this.connect();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setLong(1, userId);
-            ResultSet rs = pstmt.executeQuery();
-            while (rs.next()) {
-                System.out.println(rs.getString("bio") + "\t" +
-                        rs.getString("photo") + "\t" +
-                        rs.getString("faculty"));
-            }
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    public String sendProfile(Long userId) throws SQLException {
+    public String sendProfile(Long userId) {
         String sql = "SELECT bio, faculty "
                 + "FROM warehouses WHERE userId = ?";
         try (Connection conn = this.connect();
@@ -73,7 +36,7 @@ public class SelectApp {
         return null;
     }
 
-    public String sendUsername(Long userId) throws SQLException {
+    public String sendUsername(Long userId) {
         String sql = "SELECT username "
                 + "FROM warehouses WHERE userId = ?";
         try (Connection conn = this.connect();
